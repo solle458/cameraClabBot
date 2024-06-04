@@ -8,7 +8,13 @@ function doPost(e){
       let userId = event.source.userId;
       let userProfile = getUserProfile(userId);
       let userName = userProfile.displayName;
-      sheet.appendRow([new Date(), userId, userName]);
+      let searchedRow = searchRows(sheet, userId.toString());
+      if(searchedRow != -1)sheet.appendRow([userId, userName]);
+    }
+    if(event.type == 'unfollow'){
+      let userId = event.source.userId;
+      let searchedRow = searchRows(sheet, userId.toString());
+      if(searchedRow != -1)sheet.deleteRow(searchedRow);
     }
     if(event.type == 'message'){ // メッセージ受信イベントであるか判定
       if(event.message.type == 'text'){ // 受信したのが普通のテキストメッセージであるか
